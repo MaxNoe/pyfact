@@ -18,6 +18,9 @@ __all__ = [
     'FTMTriggerRates',
     'BiasVoltage',
     'FADTemperature',
+    'BiasCurrentUncalibrated',
+    'BiasCurrentCalibrated',
+    'TriggerThresholds',
 ]
 
 
@@ -171,3 +174,71 @@ class FADTemperature(AuxService):
         'timestamp': fact_mjd_to_datetime,
     }
     ignored_columns = ['QoS', ]
+
+
+class BiasCurrentUncalibrated(AuxService):
+    basename = "BIAS_CONTROL_CURRENT"
+    renames = {
+        'Time': 'timestamp',
+        'I': 'bias_current',
+    }
+    transforms = {
+        'timestamp': fact_mjd_to_datetime,
+    }
+    ignored_columns = ['QoS', ]
+
+
+class BiasCurrentCalibrated(AuxService):
+    basename = 'FEEDBACK_CALIBRATED_CURRENTS'
+    renames = {
+        'Time': 'timestamp',
+        'I': 'bias_current',
+    }
+    transforms = {
+        'timestamp': fact_mjd_to_datetime,
+    }
+    ignored_columns = [
+        'QoS',
+        'I_avg',
+        'I_rms',
+        'I_med',
+        'I_dev',
+        'N',
+        'T_diff',
+        'U_ov',
+        'U_nom',
+        'dU_temp',
+    ]
+
+
+class TriggerThresholds(AuxService):
+    basename = 'FTM_CONTROL_STATIC_DATA'
+    renames = {
+        'Time': 'timestamp',
+        'PatchThresh': 'patch_threshold',
+    }
+    transforms = {
+        'timestamp': fact_mjd_to_datetime,
+    }
+    ignored_columns = [
+        'QoS',
+        'FTMtimeStamp',
+        'GeneralSettings',
+        'LEDStatus',
+        'ActiveFTU',
+        'TriggerInterval',
+        'TriggerSeq',
+        'LPSettings',
+        'PhysTrigMult',
+        'CalibTrigMult',
+        'PhysTrigWindow',
+        'CalibTrigWindow',
+        'TrigDelay',
+        'TMDelay',
+        'DeadTime',
+        'ClkCond',
+        'PixEnabled',
+        'PatchThresh',
+        'Multiplicity',
+        'Prescaling',
+    ]
