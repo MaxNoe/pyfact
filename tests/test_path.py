@@ -81,3 +81,10 @@ def test_template_to_path():
         assert result == single_pe_path_2runs(
             *night_run,
             run2=night_run[1]+2)
+
+
+def test_float_input():
+    assert '.' not in tree_path(20170901, 123, 'prefix', '_suffix')
+    assert '.' not in tree_path(20170901.0, 123, 'prefix', '_suffix')
+    assert '.' not in tree_path(20170901, 123.0, 'prefix', '_suffix')
+    assert '.' not in tree_path(20170901.0, 123.0, 'prefix', '_suffix')
