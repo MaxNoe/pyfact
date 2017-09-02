@@ -27,7 +27,7 @@ def template_to_path(night, run, template, **kwargs):
         if template contains other place holders than Y,M,D,N,R
         kwargs are used to format these.
     '''
-    night = str(night)
+    night = str(int(night))
     if run is not None:
         kwargs['R'] = '{:03d}'.format(int(run))
 
