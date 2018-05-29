@@ -20,8 +20,6 @@ from .representation import PlanarRepresentation
 from ..instrument.constants import FOCAL_LENGTH_MM, LOCATION
 import numpy as np
 
-focal_length = FOCAL_LENGTH_MM * u.mm
-
 
 class CameraFrame(BaseCoordinateFrame):
     '''
@@ -49,6 +47,7 @@ class CameraFrame(BaseCoordinateFrame):
     obstime = TimeAttribute(default=None)
     location = EarthLocationAttribute(default=LOCATION)
     rotated = Attribute(default=True)
+    focal_length = Attribute(default=FOCAL_LENGTH_MM * u.mm)
 
 
 @frame_transform_graph.transform(FunctionTransform, CameraFrame, AltAz)
@@ -62,6 +61,7 @@ def camera_to_altaz(camera, altaz):
     if camera.rotated is True:
         x, y = y, -x
 
+    focal_length = camera.focal_length
     z = 1 / np.sqrt(1 + (x / focal_length)**2 + (y / focal_length)**2)
     x *= z / focal_length
     y *= z / focal_length
@@ -98,6 +98,7 @@ def altaz_to_camera(altaz, camera):
     cartesian = cartesian.transform(rot_z_az)
     cartesian = cartesian.transform(rot_y_zd)
 
+    focal_length = camera.focal_length
     x = (cartesian.x * focal_length / cartesian.z).copy()
     y = (cartesian.y * focal_length / cartesian.z).copy()
 
