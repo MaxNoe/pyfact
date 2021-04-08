@@ -1,3 +1,4 @@
+import warnings
 from os import path
 import json
 import tables
@@ -578,11 +579,12 @@ def read_simulated_spectrum(corsika_headers_path):
             r = f['corsika_runs'].attrs.get('scatter_radius')
             unit = f['corsika_runs'].attrs.get('scatter_radius_unit', u.m)
             if r is None:
-                raise ValueError(
+                warnings.warn(
                     'File does neither contain column `/corsika_runs/x_scatter` '
                     'nor the attribute `scatter_radius`'
                 )
-            summary['x_scatter'] = u.Quantity(r, u.m)
+            else:
+                summary['x_scatter'] = u.Quantity(r, u.m)
 
     for key, unit in keys.items():
         unique_values = runs[key].unique()
